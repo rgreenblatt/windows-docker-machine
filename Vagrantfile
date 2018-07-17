@@ -8,6 +8,7 @@ Vagrant.require_version ">= 1.8.4"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.communicator = "winrm"
 
+  config.disksize.size = "100GB"
   config.vm.synced_folder ".", "/vagrant", disabled: true
   home = ENV['HOME'].gsub('\\', '/')
   config.vm.synced_folder home, home
@@ -77,7 +78,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provider "virtualbox" do |v, override|
     v.gui = false
     v.memory = 2048
-    v.cpus = 2
+    v.cpus = 4
     v.linked_clone = true
     override.vm.network :private_network, ip: "192.168.99.90", gateway: "192.168.99.1"
   end

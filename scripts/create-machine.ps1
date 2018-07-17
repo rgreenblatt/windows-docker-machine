@@ -158,6 +158,7 @@ function updateConfig($daemonJson, $serverCertsPath, $enableLCOW, $experimental)
     $experimental = $true
   }
   $config = $config | Add-Member(@{ `
+    "storage-opts" = @("size=80G"); `
     hosts = @("tcp://0.0.0.0:2376", "npipe://"); `
     tlsverify = $true; `
     tlscacert = "$serverCertsPath\ca.pem"; `
@@ -175,6 +176,7 @@ function createMachineConfig ($machineName, $machineHome, $machinePath, $machine
 
   $config = @"
 {
+    
     "ConfigVersion": 3,
     "Driver": {
         "IPAddress": "$machineIp",
@@ -306,7 +308,7 @@ dockerd --unregister-service
 if ($enableLCOW) {
   installLCOW  
 }
-dockerd --register-service  
+dockerd --register-service 
 Write-Host "Reducing minimum API version from 1.24 to 1.15"
 sed "$env:ProgramFiles\docker\dockerd.exe" "1.24" "1.15"
 
