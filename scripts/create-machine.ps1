@@ -157,7 +157,8 @@ function updateConfig($daemonJson, $serverCertsPath, $enableLCOW, $experimental)
   if ($enableLCOW) {
     $experimental = $true
   }
-  $config = $config | Add-Member(@{ `
+
+  $config = $config | Add-Member(@{ ` 
     "storage-opts" = @("size=80G"); `
     hosts = @("tcp://0.0.0.0:2376", "npipe://"); `
     tlsverify = $true; `
@@ -312,7 +313,13 @@ dockerd --register-service
 Write-Host "Reducing minimum API version from 1.24 to 1.15"
 sed "$env:ProgramFiles\docker\dockerd.exe" "1.24" "1.15"
 
+$size = (Get-PartitionSupportedSize -DiskNumber 0 -PartitionNumber 2)
+Resize-Partition -DiskNumber 0 -PartitionNumber 2 -Size $size.SizeMax
+
 Start-Service docker
 
 Write-Host "Opening Docker TLS port"
 & netsh advfirewall firewall add rule name="Docker TLS" dir=in action=allow protocol=TCP localport=2376
+
+
+

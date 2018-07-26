@@ -7,9 +7,11 @@ Vagrant.require_version ">= 1.8.4"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.communicator = "winrm"
-
+  
+  config.vm.box = "windows_2016_docker"
   config.disksize.size = "100GB"
   config.vm.synced_folder ".", "/vagrant", disabled: true
+
   home = ENV['HOME'].gsub('\\', '/')
   config.vm.synced_folder home, home
 
